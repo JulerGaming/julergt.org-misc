@@ -1,24 +1,18 @@
-const http = require('http');
-const path = require('path');
-const fs = require('fs');
+const express = require('express');
+const path = require('node:path');
+const app = express();
+const port = 8080;
 
-const server = http.createServer((req, res) => {
-    const publicPath = path.join(__dirname, 'public', req.url === '/' ? 'index.html' : req.url);
-    const ext = path.extname(publicPath);
-    const mimeTypes = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.gif': 'image/gif', '.svg': 'image/svg+xml' };
-
-    fs.readFile(publicPath, (err, data) => {
-        if (err) {
-            res.writeHead(404);
-            res.end('Not Found');
-            return;
-        }
-        res.writeHead(200, { 'Content-Type': mimeTypes[ext] || 'text/plain' });
-        res.end(data);
-    });
+app.get('/', (req, res) => {
+    res.send(path.join(__dirname, 'public'));
 });
 
-const PORT = 8080;
-server.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+});
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use((req, res) => {
+    res.status(404).send('404 - Page Not Found');
 });
