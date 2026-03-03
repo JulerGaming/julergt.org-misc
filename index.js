@@ -6,14 +6,16 @@ const port = 3000;
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-    res.send(JSON.stringify({
+    res.writeHead(400, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
         status: '400',
         message: 'Cannot GET /'
     }));
 });
 
 app.post('/', (req, res) => {
-    res.send(JSON.stringify({
+    res.writeHead(400, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
         status: '400',
         message: 'Cannot POST /'
     }));
