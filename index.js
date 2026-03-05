@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 app.get('/flagged', (req, res) => {
     res.writeHead(403, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({
-        message: 'not implemented yet'
+        message: 'not implemented yet, please check back later'
     }));
 });
 
