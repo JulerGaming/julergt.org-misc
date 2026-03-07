@@ -3,6 +3,27 @@ const { twiml: { VoiceResponse } } = require("twilio");
 const app = express();
 const path = require('path');
 const port = 3000;
+const twilio = require("twilio");
+const cron = require("node-cron");
+require('dotenv').config();
+
+const accountSid = process.env.TWILIO_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+
+const client = twilio(accountSid, authToken);
+
+const fromNumber = process.env.FROM_NUMBER; // your Twilio number
+const toNumber = process.env.TO_NUMBER;   // your phone
+
+function callMe() {
+    client.calls.create({
+        url: "https://misc.julergt.org/call", // plays the recording
+        to: toNumber,
+        from: fromNumber
+    })
+    .then(call => console.log("Calling you:", call.sid))
+    .catch(err => console.error(err));
+}
 
 app.use('/nonapi', express.static(path.join(__dirname, 'public')));
 
