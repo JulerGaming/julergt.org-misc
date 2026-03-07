@@ -1,4 +1,6 @@
 const express = require('express');
+const express = require("express");
+const { twiml: { VoiceResponse } } = require("twilio");
 const app = express();
 const path = require('path');
 const port = 3000;
@@ -26,6 +28,19 @@ app.post('/', (req, res) => {
         status: '400',
         message: 'Cannot POST /'
     }));
+});
+
+app.post("/call", (req, res) => {
+    const response = new VoiceResponse();
+
+    // play recording
+    response.play("https://misc.julergt.org/nonapi/call-error.mp3");
+
+    // hang up after audio
+    response.hangup();
+
+    res.type("text/xml");
+    res.send(response.toString());
 });
 
 app.listen(port, () => {
