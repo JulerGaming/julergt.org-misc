@@ -42,6 +42,14 @@ app.get('/flagged', (req, res) => {
     }));
 });
 
+app.get('/calljulergt', (req, res) => {
+    callMe();
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+        message: 'Calling you now...'
+    }));
+});
+
 app.post('/', (req, res) => {
     res.writeHead(400, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({
