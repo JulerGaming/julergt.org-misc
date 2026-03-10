@@ -55,6 +55,10 @@ app.options("/moderate", async (req, res) => {
     }
 });
 
+app.post("/moderate", async (req, res) => {
+    return res.status(200).json({ message: "This isn't the code." })
+})
+
 const accountSid = process.env.TWILIO_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 
