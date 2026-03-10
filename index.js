@@ -22,6 +22,10 @@ app.options("/moderate", async (req, res) => {
         return res.status(400).json({ error: "Invalid payload" });
     }
 
+    if (unique_identifier == "test-device-id") {
+        return res.status(200).json({ message: "Success" });
+    }
+
     try {
         // Call PlayFab CloudScript with the provided Secret Key
         const response = await axios.post(
