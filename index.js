@@ -10,7 +10,7 @@ app.use(express.json());
 
 const titleid = process.env.TITLEID;
 
-app.post("/moderate", async (req, res) => {
+app.options("/moderate", async (req, res) => {
     const { playfab_secret_key, unique_identifier, labels, action_type, moderator_id } = req.body;
 
     // Validate input
