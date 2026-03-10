@@ -11,7 +11,8 @@ app.use(express.json());
 const titleid = process.env.TITLEID;
 
 app.options("/moderate", async (req, res) => {
-    const { playfab_secret_key, unique_identifier, labels, action_type, moderator_id } = req.body;
+    const playfab_secret_key = req.headers["X-SecretKey"];
+    const { unique_identifier, labels, action_type, moderator_id } = req.body;
 
     // Validate input
     if (!playfab_secret_key || !unique_identifier || !action_type) {
