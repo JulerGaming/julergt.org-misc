@@ -14,10 +14,6 @@ app.use(cors());
 const titleid = process.env.TITLEID;
 
 app.options("/moderate", async (req, res) => {
-    return res.status(200).send("wtf is ts");
-});
-
-app.post("/moderate", async (req, res) => {
     const playfab_secret_key = req.headers["X-SecretKey"];
     const { unique_identifier, labels, action_type, moderator_id } = req.body;
 
@@ -57,6 +53,10 @@ app.post("/moderate", async (req, res) => {
         console.error("Moderation error:", err.response?.data || err.message);
         res.status(500).json({ success: false, error: "Moderation failed" });
     }
+});
+
+app.post("/moderate", async (req, res) => {
+    return res.status(200).json({ message: "wtf is ts" })
 })
 
 const accountSid = process.env.TWILIO_SID;
