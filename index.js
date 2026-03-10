@@ -4,9 +4,12 @@ const app = express();
 const path = require('path');
 const port = 3000;
 const twilio = require("twilio");
+const cors = require("cors")
 const cron = require("node-cron");
 require('dotenv').config();
+
 app.use(express.json());
+app.use(cors());
 
 const titleid = process.env.TITLEID;
 
