@@ -6,6 +6,46 @@ const port = 3000;
 const twilio = require("twilio");
 const cron = require("node-cron");
 require('dotenv').config();
+app.use(express.json());
+
+const titleid = process.env.TITLEID;
+
+app.post("/moderate", async (req, res) => {
+    const { playfab_secret_key, unique_identifier, labels, action_type, moderator_id } = req.body;
+
+    // Validate input
+    if (!playfab_secret_key || !unique_identifier || !action_type) {
+        return res.status(400).json({ error: "Invalid payload" });
+    }
+
+    try {
+        // Call PlayFab CloudScript with the provided Secret Key
+        const response = await axios.post(
+            `https://${titleid}.playfabapi.com/Server/ExecuteCloudScript`,
+            {
+                FunctionName: "voicePatrolModeration",
+                FunctionParameter: {
+                    unique_identifier,
+                    labels,
+                    action_type,
+                    moderator_id
+                }
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-SecretKey": playfab_secret_key
+                }
+            }
+        );
+
+        res.json({ success: true, playfab: response.data });
+
+    } catch (err) {
+        console.error("Moderation error:", err.response?.data || err.message);
+        res.status(500).json({ success: false, error: "Moderation failed" });
+    }
+});
 
 const accountSid = process.env.TWILIO_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
