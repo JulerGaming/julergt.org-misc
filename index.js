@@ -10,6 +10,7 @@ require('dotenv').config();
 
 app.use(express.json());
 app.use(cors());
+app.use(express.urlencoded({ extended: false }));
 
 const titleid = process.env.TITLEID;
 
@@ -113,10 +114,60 @@ app.post('/', (req, res) => {
 app.post("/call", (req, res) => {
     const response = new VoiceResponse();
 
-    // play recording
-    response.play("https://misc.julergt.org/nonapi/call-error.mp3");
+    const gather = response.gather({
+        numDigits: 1,
+        action: "/call/menu",
+        method: "POST",
+        timeout: 10
+    });
 
-    // hang up after audio
+    gather.say("Welcome to JulerGT Support");
+    gather.say("If you need help for Bismuth, press 1");
+    gather.say("If you need help for Juler's Mod, press 2");
+    gather.say("If you need help for Horror Remake, press 3");
+    gather.say("Otherwise, press star");
+
+    // If they don't press anything
+    response.say("We didn't receive a selection. Goodbye.");
+    response.hangup();
+
+    res.type("text/xml");
+    res.send(response.toString());
+});
+
+app.post("/call/menu", (req, res) => {
+    const response = new VoiceResponse();
+
+    const digit = req.body.Digits;
+
+    switch (digit) {
+        case "1":
+            response.say("You selected Bismuth support.");
+            response.dial('+17872447242');
+            break;
+
+        case "2":
+            response.say("You selected Juler's Mod support.");
+            response.dial('+17872447242');
+            break;
+
+        case "3":
+            response.say("You selected Horror Remake support.");
+            response.dial('+17872447242');
+            break;
+
+        case "*":
+            response.say("Goodbye");
+            response.hangup();
+            break;
+
+        default:
+            response.say("Invalid selection.");
+            response.say("Goodbye.");
+            response.hangup();
+            break;
+    }
+
     response.hangup();
 
     res.type("text/xml");
