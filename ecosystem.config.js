@@ -30,6 +30,9 @@ module.exports = {
 
   deploy: {
     production: {
+      host: 'github.com',
+      user: 'JulerGaming',
+      path: 'C:/Users/Juler/Documents/julergt.org-misc',
       ref: 'origin/master',
       repo: 'https://github.com/JulerGaming/julergt.org-misc.git',
       'pre-deploy-local': '',
